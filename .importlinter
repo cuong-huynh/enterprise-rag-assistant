@@ -1,0 +1,18 @@
+[importlinter]
+root_packages =
+    assistant
+
+[importlinter:contract:layers]
+name = Layer contract: api → modules → integrations → core
+type = layers
+layers =
+    assistant.api
+    assistant.modules
+    assistant.integrations
+    assistant.core
+
+[importlinter:contract:independence]
+name = RAG module is independent (text2sql not yet created)
+type = independence
+modules =
+    assistant.modules.rag
