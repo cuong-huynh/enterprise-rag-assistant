@@ -1,0 +1,46 @@
+[project]
+name = "enterprise-rag-assistant"
+version = "0.1.0"
+description = "Enterprise RAG assistant — document Q&A + structured ERP queries in one chat interface"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pydantic-settings>=2.3",
+    "pypdf>=6.16.1",
+    "chromadb>=1.5.9",
+    "sentence-transformers>=6.0.0",
+    "langchain-text-splitters>=1.1.2",
+    "python-multipart>=0.0.32",
+]
+
+[project.scripts]
+assistant = "assistant.main:create_app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/assistant"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "httpx>=0.27",
+    "ruff>=0.6",
+    "import-linter>=2.1",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = ["docs/"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

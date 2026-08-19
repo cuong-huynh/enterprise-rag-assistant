@@ -1,0 +1,15 @@
+"""Application factory — composition only, no business logic here."""
+
+from fastapi import FastAPI
+
+from assistant.api.routes import router
+from assistant.core.config import settings
+
+
+def create_app() -> FastAPI:
+    app = FastAPI(title=settings.app_name, version=settings.app_version, debug=settings.debug)
+    app.include_router(router)
+    return app
+
+
+app = create_app()
