@@ -46,6 +46,6 @@ async def ingest(file: UploadFile) -> IngestResponse:
         tmp.write(content)
         tmp_path = Path(tmp.name)
 
-    result = await rag_service.ingest_file(tmp_path)
+    result = await rag_service.ingest_file(tmp_path, display_name=file.filename)
     tmp_path.unlink(missing_ok=True)
     return IngestResponse(file=file.filename, num_chunks=result.num_chunks)

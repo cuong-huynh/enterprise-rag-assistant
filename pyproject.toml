@@ -31,12 +31,13 @@ dev = [
     "httpx>=0.27",
     "ruff>=0.6",
     "import-linter>=2.1",
+    "fpdf2>=2.8.8",
 ]
 
 [tool.ruff]
 line-length = 100
 target-version = "py312"
-exclude = ["docs/"]
+exclude = ["docs/", "scripts/"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]

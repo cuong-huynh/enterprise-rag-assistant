@@ -16,12 +16,18 @@ class IngestResult:
     num_chunks: int
 
 
-async def ingest_file(path: Path) -> IngestResult:
-    """Load a PDF, chunk it, embed and store in Chroma."""
+async def ingest_file(path: Path, display_name: str | None = None) -> IngestResult:
+    """Load a PDF, chunk it, embed and store in Chroma.
+
+    display_name: the original filename shown in citations (defaults to path.name).
+    """
+    name = display_name or path.name
     pages = load_pdf(path)
+    # Override source metadata so citations show the original filename, not a temp path.
+    pages = [(text, {**meta, "source": name}) for text, meta in pages]
     docs = chunk_texts(pages)
     num_stored = embed_and_store(docs)
-    return IngestResult(file=path.name, num_chunks=num_stored)
+    return IngestResult(file=name, num_chunks=num_stored)
 
 
 async def ask(question: str, top_k: int = 5) -> RagAnswer:
