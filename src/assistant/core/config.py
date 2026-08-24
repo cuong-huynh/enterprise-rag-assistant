@@ -1,4 +1,8 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+_REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
 class Settings(BaseSettings):
@@ -13,6 +17,9 @@ class Settings(BaseSettings):
     llm_mode: str = "mock"  # "mock" | "real"
     openai_api_key: str = ""
     openai_model: str = "gpt-4o-mini"
+
+    erp_mode: str = "mock"  # "mock" | "odoo"
+    mock_odoo_db_path: Path = _REPO_ROOT / "data" / "mock_odoo.sqlite"
 
 
 settings = Settings()
