@@ -2,38 +2,11 @@ import tempfile
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, UploadFile
-from pydantic import BaseModel
 
-from assistant.core.config import settings
+from assistant.api.schemas import IngestResponse
 from assistant.modules.rag import service as rag_service
 
-router = APIRouter()
-
-
-class AskRequest(BaseModel):
-    question: str
-
-
-class AskResponse(BaseModel):
-    answer: str
-    sources: list[str]
-    mode: str
-
-
-class IngestResponse(BaseModel):
-    file: str
-    num_chunks: int
-
-
-@router.get("/health")
-async def health() -> dict:
-    return {"status": "ok", "version": settings.app_version}
-
-
-@router.post("/ask", response_model=AskResponse)
-async def ask(body: AskRequest) -> AskResponse:
-    result = await rag_service.ask(body.question)
-    return AskResponse(answer=result.answer, sources=result.sources, mode=settings.llm_mode)
+router = APIRouter(tags=["ingest"])
 
 
 @router.post("/ingest", response_model=IngestResponse)

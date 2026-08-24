@@ -2,13 +2,15 @@
 
 from fastapi import FastAPI
 
-from assistant.api.routes import router
+from assistant.api.routes import ask, health, ingest
 from assistant.core.config import settings
 
 
 def create_app() -> FastAPI:
     app = FastAPI(title=settings.app_name, version=settings.app_version, debug=settings.debug)
-    app.include_router(router)
+    app.include_router(health.router)
+    app.include_router(ask.router)
+    app.include_router(ingest.router)
     return app
 
 

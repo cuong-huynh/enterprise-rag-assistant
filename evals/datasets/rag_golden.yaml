@@ -1,0 +1,226 @@
+# P2 golden set — retrieval labels for the six sample SOPs/guides.
+# expected_sources: filename must appear in top-k citation sources.
+# expected_answer_points: key facts for later groundedness scoring when LLM_MODE=real.
+# Seed items (q01–q10) match scripts/p1_measure.py. Paraphrases and extra facts follow.
+
+dataset: rag_golden
+version: 1
+top_k: 5
+
+cases:
+  # --- seed (P1 measure) ---
+  - id: q01
+    question: >-
+      How do I process a receipt in Odoo when the delivered quantity differs from
+      the purchase order?
+    expected_sources:
+      - odoo_inventory_guide.pdf
+    expected_answer_points:
+      - Odoo prompts to create a backorder for the remaining quantity
+      - Open the receipt, check quantities, then Validate
+
+  - id: q02
+    question: What are the steps to perform a cycle count in the warehouse?
+    expected_sources:
+      - warehouse_sop.pdf
+    expected_answer_points:
+      - Blind count without looking at system quantities
+      - A-class weekly, B-class monthly, C-class quarterly
+      - Warehouse Manager approves variances with value over 500 USD
+
+  - id: q03
+    question: How do I configure reordering rules in Odoo Inventory?
+    expected_sources:
+      - odoo_inventory_guide.pdf
+    expected_answer_points:
+      - Set product, location, Min Qty and Max Qty
+      - When stock falls below Min Qty the scheduler creates a PO or MO
+      - Inventory > Configuration > Reordering Rules
+
+  - id: q04
+    question: Who is responsible for approving inventory adjustments with value above 500 USD?
+    expected_sources:
+      - warehouse_sop.pdf
+    expected_answer_points:
+      - Warehouse Manager approves variances with value greater than 500 USD
+      - Inventory Controller approves ordinary adjustments
+
+  - id: q05
+    question: What safety equipment is required in the warehouse?
+    expected_sources:
+      - warehouse_sop.pdf
+    expected_answer_points:
+      - Steel-toed boots
+      - High-visibility vest
+
+  - id: q06
+    question: Which costing method should be used for perishable goods in Odoo?
+    expected_sources:
+      - odoo_inventory_guide.pdf
+    expected_answer_points:
+      - FIFO is recommended for perishable goods
+      - Costing method is set per product category
+
+  - id: q07
+    question: What is required for a three-way match before releasing supplier payment?
+    expected_sources:
+      - purchase_sop.pdf
+    expected_answer_points:
+      - Purchase Order, Goods Receipt Note, and supplier invoice
+      - Payment is never released on invoice-only evidence
+
+  - id: q08
+    question: What sample size does incoming quality control use for non-certified suppliers?
+    expected_sources:
+      - quality_control_sop.pdf
+    expected_answer_points:
+      - Inspect 10% of units in the lot
+      - Minimum 8 units and maximum 50 units per SKU per receipt
+
+  - id: q09
+    question: When may a returned item be restocked to available inventory?
+    expected_sources:
+      - returns_rma_sop.pdf
+    expected_answer_points:
+      - Unopened, original packaging, within 14 days of delivery
+      - Opened unused items go to WH/ReturnsQuarantine
+
+  - id: q10
+    question: How long is an Odoo sales quotation valid by default?
+    expected_sources:
+      - odoo_sales_guide.pdf
+    expected_answer_points:
+      - Default validity is 15 days from the quotation date
+      - After expiry Confirm is blocked until Extend Validity
+
+  # --- paraphrases of seed (same facts, different wording) ---
+  - id: q11
+    question: What does Odoo do if the quantity on the delivery note does not match the PO?
+    expected_sources:
+      - odoo_inventory_guide.pdf
+    expected_answer_points:
+      - Prompt to create a backorder for the remaining quantity
+
+  - id: q12
+    question: How is a rolling warehouse cycle count scheduled and executed?
+    expected_sources:
+      - warehouse_sop.pdf
+    expected_answer_points:
+      - A-class SKUs weekly, B-class monthly, C-class quarterly
+      - Count without looking at system quantities
+
+  - id: q13
+    question: How do min and max quantity reordering rules trigger replenishment in Odoo?
+    expected_sources:
+      - odoo_inventory_guide.pdf
+    expected_answer_points:
+      - Below Min Qty the scheduler creates a Purchase or Manufacturing Order
+
+  - id: q14
+    question: Who must approve a cycle-count variance worth more than five hundred dollars?
+    expected_sources:
+      - warehouse_sop.pdf
+    expected_answer_points:
+      - Warehouse Manager
+
+  - id: q15
+    question: What PPE must staff wear on the warehouse floor?
+    expected_sources:
+      - warehouse_sop.pdf
+    expected_answer_points:
+      - Steel-toed boots and a high-visibility vest
+
+  - id: q16
+    question: Should perishable products use FIFO or average cost in Odoo Inventory?
+    expected_sources:
+      - odoo_inventory_guide.pdf
+    expected_answer_points:
+      - FIFO is recommended for perishable goods
+
+  - id: q17
+    question: Which three documents must Accounts Payable match before paying a supplier?
+    expected_sources:
+      - purchase_sop.pdf
+    expected_answer_points:
+      - Purchase Order, Goods Receipt Note, supplier invoice
+
+  - id: q18
+    question: How many units does IQC inspect for suppliers that are not skip-lot certified?
+    expected_sources:
+      - quality_control_sop.pdf
+    expected_answer_points:
+      - 10% of the lot, min 8, max 50 units per SKU per receipt
+
+  - id: q19
+    question: Under what conditions can a customer return go back to available stock?
+    expected_sources:
+      - returns_rma_sop.pdf
+    expected_answer_points:
+      - Unopened, original packaging, within 14 days of delivery
+
+  - id: q20
+    question: What is the default validity period of a sales quotation in Odoo 17?
+    expected_sources:
+      - odoo_sales_guide.pdf
+    expected_answer_points:
+      - 15 days from the quotation date
+
+  # --- extra facts (harder, still one primary document) ---
+  - id: q21
+    question: What variance on a three-way match sends the invoice back to Procurement?
+    expected_sources:
+      - purchase_sop.pdf
+    expected_answer_points:
+      - Variance above 1% or 50 USD, whichever is greater
+
+  - id: q22
+    question: Who can release stock from WH/QualityHold to WH/Stock after a failed IQC lot?
+    expected_sources:
+      - quality_control_sop.pdf
+    expected_answer_points:
+      - Only a Quality Engineer can release stock to WH/Stock
+
+  - id: q23
+    question: Must a customer return have an RMA before the warehouse accepts the parcel?
+    expected_sources:
+      - returns_rma_sop.pdf
+    expected_answer_points:
+      - RMA number is required before the warehouse may accept the parcel
+      - Walk-in returns without an RMA are refused at the dock
+
+  - id: q24
+    question: When does a line discount on a sales order need Sales Manager approval?
+    expected_sources:
+      - odoo_sales_guide.pdf
+    expected_answer_points:
+      - Line discounts above 15% require Sales Manager approval
+
+  - id: q25
+    question: What down payment is required before the first delivery on large sales orders?
+    expected_sources:
+      - odoo_sales_guide.pdf
+    expected_answer_points:
+      - Down payments of 30% for orders above 20,000 USD
+
+  - id: q26
+    question: Who approves a purchase requisition above 10,000 USD?
+    expected_sources:
+      - purchase_sop.pdf
+    expected_answer_points:
+      - CFO above 10,000 USD
+      - Department head up to 10,000 USD
+
+  - id: q27
+    question: How long must incoming quality control records be kept?
+    expected_sources:
+      - quality_control_sop.pdf
+    expected_answer_points:
+      - Keep IQC records for 36 months
+
+  - id: q28
+    question: What is the maximum forklift speed in warehouse aisles?
+    expected_sources:
+      - warehouse_sop.pdf
+    expected_answer_points:
+      - Maximum forklift speed is 8 km/h in aisles
+      - 4 km/h near pedestrian zones

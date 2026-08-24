@@ -7,8 +7,8 @@ An AI assistant that answers questions from internal documents (RAG) and structu
 | Phase | Status |
 |---|---|
 | P0 — Skeleton (FastAPI + mock LLM) | ✅ Done |
-| P1 — RAG vertical slice | 🔄 In progress |
-| P2 — Eval harness | ⬜ |
+| P1 — RAG vertical slice | ✅ Done |
+| P2 — Eval harness | 🔄 In progress |
 | P3 — Text-to-SQL on mock Odoo | ⬜ |
 | P4 — Dispatcher | ⬜ |
 | P5 — Production shell (Docker, queue, load test) | ⬜ |
@@ -59,6 +59,16 @@ src/assistant/
 ```
 
 Dependency rule: `api → modules → integrations → core`. Enforced by `import-linter` in CI.
+
+## Eval (P2)
+
+From repo root (rebuilds sample PDFs, resets Chroma, scores recall@5):
+
+```bash
+uv run python -m evals.run
+```
+
+Results are written to `evals/results/<date>.md`. Use `--skip-ingest` to reuse the current index.
 
 ## CI
 
