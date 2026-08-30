@@ -12,7 +12,8 @@ layers =
     assistant.core
 
 [importlinter:contract:independence]
-name = RAG module is independent (text2sql not yet created)
+name = RAG and text2sql engines must not import each other
 type = independence
 modules =
     assistant.modules.rag
+    assistant.modules.text2sql

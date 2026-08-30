@@ -1,0 +1,37 @@
+# Guardrail keyword lists for the structured-query engine (P3).
+# Mock mode uses these rules; a real LLM can sit on top later without changing tests.
+
+guardrail:
+  write_keywords:
+    - update
+    - delete
+    - insert
+    - drop
+    - truncate
+    - alter
+  dump_keywords:
+    - dump all
+    - entire database
+    - all tables
+    - dump the database
+  out_of_scope_keywords:
+    - weather
+    - recipe
+    - football
+    - world cup
+    - python tutorial
+    - write a poem
+  forbidden_models:
+    - account.move
+    - account_move
+    - res.users
+    - res_users
+    - ir.attachment
+    - ir_attachment
+
+allowed_models:
+  - res.partner
+  - product.product
+  - sale.order
+  - sale.order.line
+  - stock.quant

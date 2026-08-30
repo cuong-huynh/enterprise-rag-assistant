@@ -16,3 +16,15 @@ class AskResponse(BaseModel):
 class IngestResponse(BaseModel):
     file: str
     num_chunks: int
+
+
+class QueryRequest(BaseModel):
+    question: str
+
+
+class QueryResponse(BaseModel):
+    answer: str
+    blocked: bool
+    block_reason: str | None
+    models_used: list[str]
+    tool_steps: int
