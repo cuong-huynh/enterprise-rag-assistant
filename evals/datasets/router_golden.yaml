@@ -1,0 +1,129 @@
+# P4 golden set — routing labels only (classifier, no engine calls).
+# expected_route: rag | data | hybrid
+
+dataset: router_golden
+version: 1
+
+cases:
+  # --- 10 document / RAG ---
+  - id: r01
+    question: How do I process a receipt when the delivered quantity differs from the PO?
+    expected_route: rag
+
+  - id: r02
+    question: What are the steps to perform a cycle count in the warehouse?
+    expected_route: rag
+
+  - id: r03
+    question: What does the inventory guide say about validating a backorder?
+    expected_route: rag
+
+  - id: r04
+    question: Quy trình kiểm kê kho theo SOP là gì?
+    expected_route: rag
+
+  - id: r05
+    question: How do I follow the warehouse SOP for blind counts?
+    expected_route: rag
+
+  - id: r06
+    question: Policy for approving variances over 500 USD per the warehouse manager?
+    expected_route: rag
+
+  - id: r07
+    question: Steps to handle a purchase receipt according to the guide?
+    expected_route: rag
+
+  - id: r08
+    question: Hướng dẫn validate receipt trong Odoo inventory guide?
+    expected_route: rag
+
+  - id: r09
+    question: How to perform cycle count weekly for A-class items?
+    expected_route: rag
+
+  - id: r10
+    question: What are the steps in the odoo inventory guide for receipts?
+    expected_route: rag
+
+  # --- 10 structured / data ---
+  - id: r11
+    question: How many confirmed sale orders are there?
+    expected_route: data
+
+  - id: r12
+    question: What is the total amount of confirmed sale orders?
+    expected_route: data
+
+  - id: r13
+    question: How many sale orders are in state sale?
+    expected_route: data
+
+  - id: r14
+    question: List stock quant quantities in the warehouse.
+    expected_route: data
+
+  - id: r15
+    question: Show the customer list from partners.
+    expected_route: data
+
+  - id: r16
+    question: Doanh thu các đơn confirmed?
+    expected_route: data
+
+  - id: r17
+    question: Product list with barcode and SKU.
+    expected_route: data
+
+  - id: r18
+    question: How many supplier partners are active?
+    expected_route: data
+
+  - id: r19
+    question: Total revenue from sale orders in state sale.
+    expected_route: data
+
+  - id: r20
+    question: Inventory stock quant summary.
+    expected_route: data
+
+  # --- 10 hybrid ---
+  - id: r21
+    question: Compare return policy with confirmed sale order revenue.
+    expected_route: hybrid
+
+  - id: r22
+    question: Explain why cycle count matters and how many stock quants we have.
+    expected_route: hybrid
+
+  - id: r23
+    question: According to the SOP, how many confirmed sale orders exist?
+    expected_route: hybrid
+
+  - id: r24
+    question: So sánh doanh thu với quy trình trả hàng trong tài liệu.
+    expected_route: hybrid
+
+  - id: r25
+    question: Policy and revenue from confirmed orders this month.
+    expected_route: hybrid
+
+  - id: r26
+    question: Inventory guide steps and how many sale orders are confirmed.
+    expected_route: hybrid
+
+  - id: r27
+    question: Giải thích tại sao doanh thu thấp theo quy trình báo cáo.
+    expected_route: hybrid
+
+  - id: r28
+    question: Both document and data — receipt procedure and order count.
+    expected_route: hybrid
+
+  - id: r29
+    question: Compare warehouse SOP with total amount of sale orders.
+    expected_route: hybrid
+
+  - id: r30
+    question: How do I process receipts and what is total revenue from orders?
+    expected_route: hybrid

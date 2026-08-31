@@ -1,0 +1,13 @@
+# Append English aliases onto the retrieve query when the user asked in Vietnamese.
+# Sample SOPs are English; MiniLM (all-MiniLM-L6-v2) misses VI-only queries (D-10).
+# Generate still receives the original question so Gemini can answer in Vietnamese.
+
+aliases:
+  - match: kiểm kê xoay vòng
+    expand: cycle count
+  - match: kiểm kê
+    expand: cycle count
+  - match: đối chiếu ba bên
+    expand: three-way match
+  - match: three-way
+    expand: three-way match

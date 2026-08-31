@@ -28,3 +28,18 @@ class QueryResponse(BaseModel):
     block_reason: str | None
     models_used: list[str]
     tool_steps: int
+
+
+class ChatRequest(BaseModel):
+    question: str
+
+
+class ChatResponse(BaseModel):
+    answer: str
+    route: str
+    reason: str
+    sources: list[str] = []
+    blocked: bool = False
+    block_reason: str | None = None
+    models_used: list[str] = []
+    tool_steps: int = 0

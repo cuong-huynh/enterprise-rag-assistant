@@ -38,3 +38,19 @@ async def test_ask_sale_orders_hits_search_read(ensure_mock_db: Path) -> None:
     assert result.models_used == ["sale.order"]
     assert str(len(expected)) in result.answer
     assert "amount_total" in result.answer
+
+
+@pytest.mark.asyncio
+async def test_ask_confirmed_orders_vietnamese_same_filter(ensure_mock_db: Path) -> None:
+    adapter = MockErpAdapter(db_path=ensure_mock_db)
+    expected = adapter.search_read(
+        "sale.order",
+        domain=[("state", "in", ["sale", "done"])],
+        fields=["name", "state", "amount_total", "date_order"],
+        limit=100,
+    )
+
+    result = await text2sql_service.ask("Có bao nhiêu đơn hàng đã được xác nhận?")
+
+    assert not result.blocked
+    assert str(len(expected)) in result.answer

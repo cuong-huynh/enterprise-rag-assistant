@@ -23,12 +23,19 @@ def _mock_response(prompt: str) -> str:
 
 
 async def _real_response(prompt: str, system: str) -> str:
+    if not settings.openai_api_key.strip():
+        raise RuntimeError(
+            "OPENAI_API_KEY is empty. Set your provider key in enterprise-rag-assistant/.env."
+        )
     try:
         from openai import AsyncOpenAI  # noqa: PLC0415
     except ImportError as exc:
-        raise RuntimeError("Install 'openai' to use LLM_MODE=real") from exc
+        raise RuntimeError("Install 'openai' to use LLM_MODE=real (uv sync)") from exc
 
-    client = AsyncOpenAI(api_key=settings.openai_api_key)
+    client = AsyncOpenAI(
+        api_key=settings.openai_api_key,
+        base_url=settings.openai_base_url,
+    )
     messages = []
     if system:
         messages.append({"role": "system", "content": system})
@@ -37,5 +44,6 @@ async def _real_response(prompt: str, system: str) -> str:
     response = await client.chat.completions.create(
         model=settings.openai_model,
         messages=messages,
+        temperature=0,
     )
     return response.choices[0].message.content or ""

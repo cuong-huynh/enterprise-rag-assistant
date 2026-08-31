@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     # Use "mock" locally and in CI to avoid burning quota.
     llm_mode: str = "mock"  # "mock" | "real"
     openai_api_key: str = ""
+    # OpenAI-compatible endpoint (OpenAI default; override for Gemini, NVIDIA NIM, etc.)
+    openai_base_url: str = "https://api.openai.com/v1"
     openai_model: str = "gpt-4o-mini"
 
     erp_mode: str = "mock"  # "mock" | "odoo"

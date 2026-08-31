@@ -1,0 +1,61 @@
+# Rule-based routing keywords (P4 v1). Matched case-insensitively as substrings.
+
+data_keywords:
+  - sale order
+  - sale orders
+  - đơn hàng
+  - doanh thu
+  - revenue
+  - amount_total
+  - stock quant
+  - tồn kho
+  - warehouse quantity
+  - product list
+  - sản phẩm
+  - sku
+  - barcode
+  - partner list
+  - customer list
+  - khách hàng
+  - supplier partners
+  - how many supplier
+  - how many orders
+  - total amount
+  - confirmed orders
+
+rag_keywords:
+  - quy trình
+  - procedure
+  - sop
+  - how do i
+  - how to
+  - steps to
+  - policy
+  - chính sách
+  - hướng dẫn
+  - guide
+  - according to the document
+  - in the manual
+  - cycle count
+  - receipt
+  - backorder
+  - validate
+  - warehouse manager
+  - inventory guide
+  - what are the steps
+  - three-way
+  - three way match
+  - supplier payment
+  - supplier invoice
+  - kiểm kê
+  - xoay vòng
+  - các bước thực hiện
+
+hybrid_keywords:
+  - compare
+  - so sánh
+  - explain why
+  - giải thích tại sao
+  - both document and data
+  - policy and revenue
+  - sop and orders

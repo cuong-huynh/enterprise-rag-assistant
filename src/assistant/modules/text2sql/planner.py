@@ -61,7 +61,12 @@ def plan_search(question: str) -> SearchPlan | None:
         )
     ):
         domain: list[Any] = []
-        if any(k in q for k in ("sale", "confirmed", "done", "doanh thu", "revenue")):
+        # "sale" in English does double duty (model name + confirmed states).
+        # Vietnamese "đơn" only selects the model — add "xác nhận" for the same filter.
+        if any(
+            k in q
+            for k in ("sale", "confirmed", "done", "doanh thu", "revenue", "xác nhận")
+        ):
             domain = [("state", "in", ["sale", "done"])]
         return SearchPlan(
             model="sale.order",

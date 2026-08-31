@@ -6,9 +6,12 @@ from assistant.integrations.llm_client import ask_llm
 from assistant.modules.rag.chunk import Document
 
 _SYSTEM_PROMPT = """\
-You are a helpful assistant. Answer the user's question using ONLY the context provided.
-If the answer cannot be found in the context, say "I cannot find this in the provided documents."
-Always end your answer with a "Sources:" line listing the documents you used.
+You are an internal operations assistant for warehouse and purchasing staff.
+Answer in the same language as the user's question.
+Use ONLY the context. If the answer is not there, say so in that language — do not guess.
+Write a short, clear reply (a few sentences or compact bullets). Do not start with \
+"Based on the provided documents" or similar filler. Do not add a Sources line \
+(citations are shown separately). Do not invent numbers that are not in the context.
 """
 
 
@@ -18,7 +21,7 @@ def _build_prompt(question: str, docs: list[Document]) -> str:
         citation = f"{doc.source} p.{doc.page + 1}"
         context_parts.append(f"[{i}] ({citation})\n{doc.text}")
     context = "\n\n".join(context_parts)
-    return f"{_SYSTEM_PROMPT}\n\nContext:\n{context}\n\nQuestion: {question}"
+    return f"Context:\n{context}\n\nQuestion: {question}"
 
 
 @dataclass
@@ -46,6 +49,6 @@ async def generate_answer(question: str, context: list[Document]) -> RagAnswer:
         )
 
     prompt = _build_prompt(question, context)
-    answer_text = await ask_llm(prompt)
+    answer_text = await ask_llm(prompt, system=_SYSTEM_PROMPT)
     sources = _extract_sources(context)
     return RagAnswer(answer=answer_text, sources=sources)
