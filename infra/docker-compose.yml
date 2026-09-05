@@ -1,0 +1,56 @@
+# Run from repository root:
+#   docker compose -f infra/docker-compose.yml up --build
+#
+# API: http://localhost:8000/  (chat UI)
+# Ingest is queued — worker embeds PDFs without blocking /chat.
+
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    expose:
+      - "6379"
+
+  api:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+    env_file:
+      - ../.env
+    environment:
+      INGEST_MODE: queue
+      REDIS_URL: redis://redis:6379/0
+      CHROMA_PERSIST_DIR: /app/data/processed/chroma
+      INGEST_INBOX_DIR: /app/data/ingest/inbox
+      MOCK_ODOO_DB_PATH: /app/data/mock_odoo.sqlite
+      LLM_MODE: mock
+    volumes:
+      - app-data:/app/data
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+    command: ["uv", "run", "--no-dev", "python", "-m", "assistant.worker"]
+    env_file:
+      - ../.env
+    environment:
+      INGEST_MODE: queue
+      REDIS_URL: redis://redis:6379/0
+      CHROMA_PERSIST_DIR: /app/data/processed/chroma
+      INGEST_INBOX_DIR: /app/data/ingest/inbox
+      MOCK_ODOO_DB_PATH: /app/data/mock_odoo.sqlite
+      LLM_MODE: mock
+    volumes:
+      - app-data:/app/data
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+volumes:
+  app-data:

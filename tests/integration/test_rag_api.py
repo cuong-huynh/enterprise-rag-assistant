@@ -16,7 +16,7 @@ def app():
 
 @pytest.mark.asyncio
 async def test_ask_returns_answer_and_sources(app) -> None:
-    from assistant.modules.rag.generate import RagAnswer
+    from assistant.modules.rag.generation.answer import RagAnswer
 
     mock_answer = RagAnswer(answer="Mocked answer", sources=["doc.pdf p.1"])
 
@@ -43,12 +43,15 @@ async def test_ingest_rejects_non_pdf(app) -> None:
 
 @pytest.mark.asyncio
 async def test_ingest_accepts_pdf(app) -> None:
-    from assistant.modules.rag.service import IngestResult
-
-    mock_result = IngestResult(file="sample.pdf", num_chunks=5)
-
     with patch(
-        "assistant.modules.rag.service.ingest_file", new=AsyncMock(return_value=mock_result)
+        "assistant.modules.ingest.service.submit_pdf",
+        new=AsyncMock(
+            return_value=type(
+                "S",
+                (),
+                {"file": "sample.pdf", "num_chunks": 5, "status": "completed", "job_id": None},
+            )()
+        ),
     ):
         async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
             resp = await client.post(

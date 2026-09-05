@@ -1,12 +1,10 @@
 """Chroma vector store singleton."""
 
-from pathlib import Path
-
 import chromadb
 
-COLLECTION_NAME = "rag_docs"
-_PERSIST_DIR = Path("data/processed/chroma")
+from assistant.core.config import settings
 
+COLLECTION_NAME = "rag_docs"
 
 _client: chromadb.ClientAPI | None = None
 
@@ -14,8 +12,9 @@ _client: chromadb.ClientAPI | None = None
 def get_chroma_client() -> chromadb.ClientAPI:
     global _client
     if _client is None:
-        _PERSIST_DIR.mkdir(parents=True, exist_ok=True)
-        _client = chromadb.PersistentClient(path=str(_PERSIST_DIR))
+        persist = settings.chroma_persist_dir
+        persist.mkdir(parents=True, exist_ok=True)
+        _client = chromadb.PersistentClient(path=str(persist))
     return _client
 
 
@@ -35,3 +34,16 @@ def reset_collection() -> None:
     except Exception:
         pass
     get_collection()
+
+
+def delete_chunks_by_source(source: str) -> int:
+    """Remove all chunks for a source filename before re-ingest."""
+    if not source:
+        return 0
+    collection = get_collection()
+    existing = collection.get(where={"source": source}, include=[])
+    ids = list(existing.get("ids") or [])
+    if not ids:
+        return 0
+    collection.delete(ids=ids)
+    return len(ids)

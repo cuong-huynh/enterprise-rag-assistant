@@ -6,7 +6,7 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 
 from assistant.main import create_app
-from assistant.modules.rag.generate import RagAnswer
+from assistant.modules.rag.generation.answer import RagAnswer
 from assistant.modules.text2sql.service import DataAnswer
 
 

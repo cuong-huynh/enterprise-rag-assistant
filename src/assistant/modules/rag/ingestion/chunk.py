@@ -5,8 +5,7 @@ from dataclasses import dataclass
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-CHUNK_SIZE = 800
-CHUNK_OVERLAP = 150
+from assistant.modules.rag.config import load_rag_config
 
 
 @dataclass
@@ -15,6 +14,8 @@ class Document:
     source: str
     page: int
     chunk_id: str
+    doc_id: str = ""
+    ingested_at: str = ""
 
 
 def _make_id(text: str, source: str, page: int) -> str:
@@ -24,9 +25,10 @@ def _make_id(text: str, source: str, page: int) -> str:
 
 def chunk_texts(pages: list[tuple[str, dict]]) -> list[Document]:
     """Split page texts into Documents with metadata."""
+    cfg = load_rag_config()
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=CHUNK_SIZE,
-        chunk_overlap=CHUNK_OVERLAP,
+        chunk_size=int(cfg["chunk_size"]),
+        chunk_overlap=int(cfg["chunk_overlap"]),
     )
     docs: list[Document] = []
     for text, meta in pages:
@@ -38,6 +40,8 @@ def chunk_texts(pages: list[tuple[str, dict]]) -> list[Document]:
                     source=meta["source"],
                     page=meta["page"],
                     chunk_id=_make_id(chunk, meta["source"], meta["page"]),
+                    doc_id=str(meta.get("doc_id") or ""),
+                    ingested_at=str(meta.get("ingested_at") or ""),
                 )
             )
     return docs

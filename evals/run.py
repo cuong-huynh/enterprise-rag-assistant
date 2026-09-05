@@ -77,6 +77,7 @@ def _write_report(
         f"- top_k: {top_k}",
         f"- Chunks in collection: {n_chunks}",
         f"- LLM_MODE: `{settings.llm_mode}`",
+        f"- EMBED_MODE: `{settings.embed_mode}`",
         f"- Recall@{top_k}: **{hits}/{len(rows)} = {recall:.0%}**",
         f"- Citation groundedness: **{g_hits}/{len(rows)} = {grounded:.0%}** "
         "(expected filename in sources; mock-safe)",

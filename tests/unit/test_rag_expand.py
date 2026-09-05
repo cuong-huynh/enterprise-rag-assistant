@@ -1,4 +1,4 @@
-from assistant.modules.rag.retrieve import expand_query
+from assistant.modules.rag.retrieval.search import expand_query
 
 
 def test_expand_cycle_count_vietnamese() -> None:

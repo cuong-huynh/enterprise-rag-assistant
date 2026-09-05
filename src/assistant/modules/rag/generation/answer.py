@@ -3,9 +3,10 @@
 from dataclasses import dataclass
 
 from assistant.integrations.llm_client import ask_llm
-from assistant.modules.rag.chunk import Document
+from assistant.modules.rag.config import load_generate_system_prompt
+from assistant.modules.rag.ingestion.chunk import Document
 
-_SYSTEM_PROMPT = """\
+_FALLBACK_SYSTEM = """\
 You are an internal operations assistant for warehouse and purchasing staff.
 Answer in the same language as the user's question.
 Use ONLY the context. If the answer is not there, say so in that language — do not guess.
@@ -13,6 +14,11 @@ Write a short, clear reply (a few sentences or compact bullets). Do not start wi
 "Based on the provided documents" or similar filler. Do not add a Sources line \
 (citations are shown separately). Do not invent numbers that are not in the context.
 """
+
+
+def _system_prompt() -> str:
+    loaded = load_generate_system_prompt()
+    return loaded or _FALLBACK_SYSTEM
 
 
 def _build_prompt(question: str, docs: list[Document]) -> str:
@@ -49,6 +55,6 @@ async def generate_answer(question: str, context: list[Document]) -> RagAnswer:
         )
 
     prompt = _build_prompt(question, context)
-    answer_text = await ask_llm(prompt, system=_SYSTEM_PROMPT)
+    answer_text = await ask_llm(prompt, system=_system_prompt())
     sources = _extract_sources(context)
     return RagAnswer(answer=answer_text, sources=sources)

@@ -10,6 +10,7 @@ Usage (from repo root)::
 
 from __future__ import annotations
 
+import argparse
 import asyncio
 import sys
 from pathlib import Path
@@ -21,15 +22,19 @@ sys.path.insert(0, str(ROOT))
 from generate_mock_odoo import generate as generate_mock_odoo  # noqa: E402
 from generate_sample_docs import generate_all  # noqa: E402
 
-from assistant.integrations.vector_store import get_collection  # noqa: E402
+from assistant.integrations.vector_store import get_collection, reset_collection  # noqa: E402
 from assistant.modules.rag import service as rag_service  # noqa: E402
 
 DB_PATH = ROOT / "data" / "mock_odoo.sqlite"
 
 
-async def _ensure_rag_index() -> int:
+async def _ensure_rag_index(*, reset: bool) -> int:
+    if reset:
+        reset_collection()
+        print("Chroma collection reset.")
+
     count = get_collection().count()
-    if count > 0:
+    if count > 0 and not reset:
         print(f"Chroma already has {count} chunks — skip ingest.")
         return count
 
@@ -52,8 +57,16 @@ def _ensure_mock_erp() -> Path:
 
 
 async def main() -> None:
+    parser = argparse.ArgumentParser(description="Bootstrap local mock ERP + RAG index")
+    parser.add_argument(
+        "--reset-chroma",
+        action="store_true",
+        help="Wipe and rebuild the Chroma collection (required after embed model change)",
+    )
+    args = parser.parse_args()
+
     _ensure_mock_erp()
-    chunks = await _ensure_rag_index()
+    chunks = await _ensure_rag_index(reset=args.reset_chroma)
     print(f"Bootstrap done. Chroma chunks indexed this run: {chunks if chunks else 'reused'}")
     print("Next: set OPENAI_API_KEY in .env, then uv run uvicorn assistant.main:app --reload")
 

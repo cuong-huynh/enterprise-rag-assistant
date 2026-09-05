@@ -1,0 +1,7 @@
+# RAG tuning — chunking, retrieval, agent budget.
+
+chunk_size: 800
+chunk_overlap: 150
+top_k: 5
+max_retrieve_steps: 3
+embed_batch_size: 32

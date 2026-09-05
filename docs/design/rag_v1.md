@@ -1,5 +1,7 @@
 # Design Doc: RAG Engine v1
 
+> **Status:** Shipped P1–P2 (2026-08). Superseded by [rag_v2.md](rag_v2.md) (2026-09). Code trên `main` hiện chạy v2; doc này giữ nguyên thiết kế v1 để tham chiếu và phỏng vấn.
+
 ## Requirements
 
 User story: *"I want to ask a question about internal documents (SOPs, workflows, Odoo guides) and receive an answer with citations that point to the exact source passages."*
@@ -121,8 +123,17 @@ Rejected:
 
 ## Definition of Done
 
-- [ ] `POST /ingest` accepts a PDF and returns the number of chunks indexed
-- [ ] `POST /ask` returns a non-empty `answer` and `sources`
-- [ ] 10 golden questions all have citations pointing to the correct document
-- [ ] `uv run pytest` is green
-- [ ] `import-linter` reports no layer violations
+- [x] `POST /ingest` accepts a PDF and returns the number of chunks indexed
+- [x] `POST /ask` returns a non-empty `answer` and `sources`
+- [x] 28 golden questions — recall@5 28/28 (MiniLM, P2 eval)
+- [x] `uv run pytest` is green
+- [x] `import-linter` reports no layer violations
+
+## Metrics (v1 baseline, frozen)
+
+| Metric | Value | Notes |
+|---|---|---|
+| Recall@5 | 28/28 (100%) | `evals/datasets/rag_golden.yaml`, 6 sample PDFs |
+| Recall@3 | 28/28 (100%) | measured 2026-08-24 |
+| Embed model | `all-MiniLM-L6-v2` | local, sentence-transformers |
+| Ask path | linear | no agent loop |

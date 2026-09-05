@@ -1,6 +1,6 @@
 """Unit tests for RAG chunking."""
 
-from assistant.modules.rag.chunk import chunk_texts
+from assistant.modules.rag.ingestion.chunk import chunk_texts
 
 
 def test_chunk_splits_long_text() -> None:

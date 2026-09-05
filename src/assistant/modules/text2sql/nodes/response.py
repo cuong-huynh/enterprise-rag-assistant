@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from typing import Any
 
+from assistant.core.config import settings
 from assistant.modules.text2sql.state import QueryState
+
+_ERP_LABEL = "mock ERP" if settings.erp_mode == "mock" else "Odoo ERP"
 
 
 def _format_rows(model: str, rows: list[dict[str, Any]]) -> str:
@@ -17,14 +20,14 @@ def _format_rows(model: str, rows: list[dict[str, Any]]) -> str:
         return (
             f"Found {n} sale.order row(s). "
             f"Sum of amount_total = {round(total, 2)} "
-            f"(from mock ERP search_read)."
+            f"(from {_ERP_LABEL} search_read)."
         )
     if model == "stock.quant" and any("quantity" in r for r in rows):
         qty = sum(float(r.get("quantity") or 0) for r in rows)
         return (
             f"Found {n} stock.quant row(s). "
             f"Sum of quantity = {round(qty, 2)} "
-            f"(from mock ERP search_read)."
+            f"(from {_ERP_LABEL} search_read)."
         )
 
     sample = rows[0]

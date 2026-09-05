@@ -1,4 +1,4 @@
-"""ERP adapters — mock SQLite (P3) and Odoo JSON-RPC stub (P6)."""
+"""ERP adapters — mock SQLite (P3) and Odoo XML-RPC (P6)."""
 
 from assistant.core.config import settings
 from assistant.modules.erp.base import ErpAdapter

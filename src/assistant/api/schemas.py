@@ -16,6 +16,8 @@ class AskResponse(BaseModel):
 class IngestResponse(BaseModel):
     file: str
     num_chunks: int
+    status: str = "completed"  # completed | queued
+    job_id: str | None = None
 
 
 class QueryRequest(BaseModel):
